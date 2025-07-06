@@ -3,7 +3,24 @@
     <%- include('./partials/head.ejs'); %>
 <body>
     <%- include('./partials/navbar.ejs'); %>
-    <h1> Testando estilo do bootstrap</h1>
+
+    <div class="container">
+        <h1> Perguntas </h1>
+        <hr>
+        <a href="/toquestion" class="btn btn-dark"> Perguntar </a>
+        <hr>
+        <% questions.forEach((question) => { %>
+            <br>
+            <div class="card">
+                <div class="card-body">
+                    <p> <%= question.title %> </p>
+                </div>
+                <div class="card-footer">
+                    <a href="/question/<%= question.id %>"> <button class="btn btn-dark"> Responder </button> </a> 
+                </div>
+            </div>
+        <% }) %>
+    </div>
 </body>
 <%- include('./partials/script.ejs'); %>
 </html>

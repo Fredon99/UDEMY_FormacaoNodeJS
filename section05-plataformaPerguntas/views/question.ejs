@@ -4,24 +4,31 @@
     <body> 
         <%- include('./partials/navbar.ejs'); %>
         <div class="container">
-            <div class="card" id="formulario-pergunta">
-                <div class="card-header">
-                    <h3> Realizar pergunta </h3>
-                </div>
+            <h1> <%= question.title %> </h1>
+            <hr>
+            <p> <%= question.description %> </p>
 
-                <div class="card-body">
-                    <form method="POST" action="/savequestion"> 
-                        <label> Título </label>
-                        <input class="form-control" name="title" type="text" placeholder="Título" >
-                        <br>
-                        <label> Descricao </label>
-                        <textarea class="form-control" name="description" placeholder="Descreva sua pergunta aqui"> </textarea>
-                        <br>
-                        <button class="btn btn-dark"> Perguntar </button>
-                    </form>
+            <hr>
+
+            <form method="POST" action="/toanswer">
+                <label> Resposta:</label>
+                <textarea class="form-control" placeholder="Digite sua resposta" name="answerBody"> </textarea>
+                <input type="hidden" name="questionID" value="<%= question.id %>">
+                <br>
+                <button class="btn btn-success" type="submit"> Responder </button>
+            </form>
+            <hr>
+            <h3> Respostas </h3>
+            <% answers.forEach((answer) => { %>
+                <div class="card">
+                    <div class="card-body">
+                        <p> <%= answer.body %></p>
+                    </div>
                 </div>
-            </div>
+                <br>
+            <% })%>
         </div>
+        
     </body>
     <%- include('./partials/script.ejs'); %>
 </html>
