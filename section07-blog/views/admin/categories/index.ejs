@@ -24,8 +24,8 @@
                         <th> <%= category.title %> </th>
                         <th> <%= category.slug %> </th>
                         <th>
-                            <button class="btn btn-warning"> Editar </button>
-                            <form method="POST" action="/categories/delete" style="display: inline;">
+                            <a href="/admin/categories/edit/<%= category.id%>"> <button class="btn btn-warning"> Editar </button> </a>
+                            <form method="POST" action="/categories/delete" style="display: inline;" onsubmit="confirmDeletion(event, this)">
                                 <input type="hidden" name="id" value="<%= category.id %>">
                                 <button class="btn btn-danger"> Deletar </button>
                             </form>
@@ -37,4 +37,13 @@
     </div>
 </body>
 <%- include('../../partials/script.ejs'); %>
+<script>
+    function confirmDeletion(event, form) {
+        event.preventDefault();
+        const confirmationValue = confirm("Deseja deletar essa categoria?");
+        if (confirmationValue) {
+            form.submit()
+        }
+    }
+</script>
 </html>

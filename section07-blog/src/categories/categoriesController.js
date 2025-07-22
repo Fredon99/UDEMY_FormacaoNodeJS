@@ -18,7 +18,7 @@ class Categories {
                 title: title,
                 slug: slugify(title)
             }).then(() => {
-                res.status(300).redirect("/")
+                res.status(300).redirect("/admin/categories")
             })
         } else {
             res.status(200).redirect("/admin/categories/new");
@@ -46,6 +46,36 @@ class Categories {
             res.status(200).redirect("/admin/categories");
         }
     };
+
+    static async editCategory (req, res) {
+        const id = req.params.id
+        Category.findByPk(id).then((category) => {
+            if (category) {
+                res.status(200).render("admin/categories/edit", {category: category})
+            } else {
+                res.status(300).redirect("/admin/categories");
+            }
+        })
+    };
+
+    static async updateCategory (req, res) {
+        const id = req.body.id
+        const title = req.body.title
+
+        Category.update({
+            title: title,
+            slug: slugify(title)
+        }, {
+            where: {
+                id: id
+            }
+        }).then( () => {
+            res.status(300).redirect("/admin/categories")
+        });
+
+    };
+
 };
+
 
 export default Categories;
