@@ -84,3 +84,6 @@ Desenvolvida um plataforma de perguntas e respostas utilizado as ferramentas Exp
     ├── question.ejs
     └── toQuestion.ejs
 ```
+
+## Seção 7
+### Blog
