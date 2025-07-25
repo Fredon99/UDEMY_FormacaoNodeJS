@@ -10,6 +10,9 @@ class Articles {
     };
 
     static async saveArticle (req,res) {
+
+        console.log(req.body)
+
         const title = req.body.title;
         const body = req.body.body;
         const category = req.body.category;
@@ -25,8 +28,28 @@ class Articles {
     };
 
     static async listArticles (req, res) {
-        res.status(200).json({message: "Welcome to articles route."});
-    }
+        Article.findAll({
+            include: [{model: Category}]
+        }).then((articles) => {
+            res.status(200).render("admin/articles/index", {articles: articles});
+        });   
+    };
+
+    static async deleteArticle (req, res) {
+        const id = req.body.id
+        console.log("id:",id);
+        if (id) {
+            Article.destroy({
+                where: {
+                    id: id
+                }
+            }).then(() => {
+                res.status(300).redirect("/admin/articles");
+            })
+        } else {
+            res.status(200).redirect("/admin/articles");
+        }
+    };
 };
 
 export default Articles;

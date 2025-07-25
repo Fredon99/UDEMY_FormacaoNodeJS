@@ -27,7 +27,7 @@ class Categories {
 
     static async listCategories (req, res) {
         Category.findAll().then((categories) => {
-            res.status(200).render("admin/categories", {categories: categories})
+            res.status(200).render("admin/categories/index", {categories: categories})
         });
     };
 
