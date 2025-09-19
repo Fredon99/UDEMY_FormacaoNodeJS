@@ -8,9 +8,36 @@ const routes = (app) => {
 
     app.route("/").get((req,res) => {
         Article.findAll({
-            include: [{model: Category}]
+            include: [{model: Category}],
+            order: [
+                ['id', 'DESC']
+            ],
+            limit: 4
         }).then( (articles) => {
-            res.status(200).render("index", {articles: articles})
+            Category.findAll().then((categories) => {
+                res.status(200).render("index", {articles: articles, categories: categories});
+            });
+        });
+    });
+
+    app.route("/:slug").get((req,res) => {
+        const slug = req.params.slug
+        
+        Article.findOne({
+            where: {
+                slug: slug
+            }
+        }).then( (article) => {
+            if (article) {
+                Category.findAll().then((categories) => {
+                res.status(200).render("article", {article: article, categories: categories});
+            });
+            } else {
+                res.status(300).redirect("/")
+            }
+        }).catch( (error) => {
+            // criar pagina de erro
+            res.status(300).redirect("/");
         });
     });
 

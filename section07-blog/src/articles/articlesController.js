@@ -44,11 +44,82 @@ class Articles {
                     id: id
                 }
             }).then(() => {
-                res.status(300).redirect("/admin/articles");
+                res.status(300).redirect("admin/articles");
             })
         } else {
-            res.status(200).redirect("/admin/articles");
+            res.status(200).redirect("admin/articles");
         }
+    };
+
+    static async editArticle (req, res) {
+        const id = req.params.id;
+
+        Article.findByPk(id).then((article) => {
+            if (article) {
+
+                Category.findAll().then((categories) => {
+                    res.render("admin/articles/edit", {categories: categories, article: article});
+                });
+
+            } else {
+                res.redirect("/");
+            }
+        }).catch((err) => {
+            res.redirect("/");
+        });
+
+    };
+
+    static async updateArticle (req, res) {
+        let id = req.body.id;
+        let title = req.body.title;
+        let body = req.body.body;
+        let category = req.body.category;
+
+        Article.update({
+            title: title,
+            body: body,
+            categoryId: category,
+            slug:slugify(title)
+        }, {where: {id: id}}).then(() => {
+            res.redirect("/admin/articles");
+        }).catch(() => {
+            res.redirect("/");
+        })
+    };
+
+    static async articlesPagination(req, res) {
+        let page = req.params.num;
+        let offset = 0;
+        let itemsPerPage = 4;
+
+        if (!page) {
+            offset = 0;
+        } else {
+            offset = parseInt(page) * itemsPerPage;
+        }
+
+        Article.findAndCountAll({
+            limit: 4,
+            offset: offset
+        }).then((articles) => {
+            console.log("---- Valor de offset: ", offset)
+            let next;
+            if (offset + 4 >= parseInt(articles.count)) {
+                next = false;
+            } else {
+                next = true;
+            };
+
+            let result = {
+                next: next,
+                articles: articles
+            };
+
+            Category.findAll().then((categories) => {
+                res.render("admin/articles/page", {result: result, categories: categories})
+            });
+        })
     };
 };
 

@@ -1,4 +1,5 @@
 import Category from "./Category.js";
+import Article from "../articles/Article.js"
 import slugify from "slugify";
 
 class Categories {
@@ -74,6 +75,28 @@ class Categories {
         });
 
     };
+
+    static async findBySlug (req,res) {
+        const slug = req.params.slug
+        
+        Category.findOne({
+            where: {
+                slug: slug
+            },
+            include: [{model: Article}]
+        }).then((category) => {
+            if (category) {
+                Category.findAll().then((categories) => {
+                    res.status(200).render("index", {articles: category.articles, categories: categories});    
+                })
+            } else {
+                // criar página de erro
+                res.status(300).redirect("/");
+            }
+        }).catch(error => {
+            res.status(300).redirect("/");
+        });
+    }
 
 };
 

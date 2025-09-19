@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<%- include('./partials/head.ejs'); %>
+<body>
+    <%- include('./partials/homeNavbar.ejs'); %>
+    <br>
+    <div class="container">
+
+        <div class="card-header">
+                <h3> <%= article.title %> </h3>
+        </div>
+        <div class="card-body">
+            <p> <%- article.body %> </p>
+        </div>
+        <br>
+
+    </div>
+</body>
+<%- include('./partials/script.ejs'); %>
+</html>
